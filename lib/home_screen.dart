@@ -29,16 +29,10 @@ const _sections = <_DemoSection>[
     title: 'Search',
     links: [
       _DemoLink(
-        label: 'Open Library Search',
-        route: '/open_library_search',
+        label: 'Open Library Book Search',
+        route: '/book_search',
         icon: Icons.menu_book_outlined,
-        subtitle: 'Infinite scroll · accumulating AsyncNotifier',
-      ),
-      _DemoLink(
-        label: 'Open Library Paged',
-        route: '/open_library_paged',
-        icon: Icons.auto_stories_outlined,
-        subtitle: 'Lazy paging · per-page family providers',
+        subtitle: 'Debounced search · lazy (query, page) family pagination',
       ),
     ],
   ),

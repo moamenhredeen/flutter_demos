@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demos/data/open_library/open_library.dart';
 
-/// One row in the search results list.
+/// One book row: small cover, title, author · year.
 class BookTile extends StatelessWidget {
   const BookTile({super.key, required this.book});
 
