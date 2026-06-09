@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demos/widgets/search_app_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'book_search_providers.dart';
 import 'widgets/search_error_view.dart';
@@ -14,11 +16,14 @@ class OpenLibrarySearchScreen extends ConsumerStatefulWidget {
   const OpenLibrarySearchScreen({super.key});
 
   @override
-  ConsumerState<OpenLibrarySearchScreen> createState() => _OpenLibrarySearchScreenState();
+  ConsumerState<OpenLibrarySearchScreen> createState() =>
+      _OpenLibrarySearchScreenState();
 }
 
-class _OpenLibrarySearchScreenState extends ConsumerState<OpenLibrarySearchScreen> {
+class _OpenLibrarySearchScreenState
+    extends ConsumerState<OpenLibrarySearchScreen> {
   final _scrollController = ScrollController();
+  final _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -29,6 +34,7 @@ class _OpenLibrarySearchScreenState extends ConsumerState<OpenLibrarySearchScree
   @override
   void dispose() {
     _scrollController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -46,39 +52,24 @@ class _OpenLibrarySearchScreenState extends ConsumerState<OpenLibrarySearchScree
     final searchAsync = ref.watch(bookSearchProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Pagination Demo')),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: TextField(
-              autofocus: true,
-              decoration: const InputDecoration(
-                hintText: 'Search books, e.g. "dune"',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
-              ),
-              onChanged: (v) => ref.read(searchQueryProvider.notifier).set(v),
-              onSubmitted: (v) =>
-                  ref.read(searchQueryProvider.notifier).submit(v),
-            ),
-          ),
-          Expanded(
-            child: switch (searchAsync) {
-              // First-page load (only when there's nothing to show yet).
-              AsyncLoading() when !searchAsync.hasValue =>
-                const Center(child: CircularProgressIndicator()),
-              AsyncError(:final error) =>
-                SearchErrorView(message: error.toString()),
-              _ => SearchResults(
-                  state: searchAsync.requireValue,
-                  query: query,
-                  scrollController: _scrollController,
-                ),
-            },
-          ),
-        ],
+      appBar: SearchAppBar(
+        controller: _searchController,
+        hintText: 'Search books, e.g. "dune"',
+        onChanged: (v) => ref.read(searchQueryProvider.notifier).set(v),
+        onSubmitted: (v) => ref.read(searchQueryProvider.notifier).submit(v),
+        onBack: () => context.go('/home'),
       ),
+      body: switch (searchAsync) {
+        // First-page load (only when there's nothing to show yet).
+        AsyncLoading() when !searchAsync.hasValue =>
+          const Center(child: CircularProgressIndicator()),
+        AsyncError(:final error) => SearchErrorView(message: error.toString()),
+        _ => SearchResults(
+            state: searchAsync.requireValue,
+            query: query,
+            scrollController: _scrollController,
+          ),
+      },
     );
   }
 }
