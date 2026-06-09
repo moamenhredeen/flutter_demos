@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
           children: [
             TextButton(
                 onPressed: (){
-                  context.go("/pagination");
+                  context.go("/open_library_search");
                 },
                 child: Text("Pagination")
             )
