@@ -3,13 +3,15 @@ import 'package:flutter_demos/app_router.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.teal),
+        colorScheme: .fromSeed(seedColor: Colors.lime),
+        useMaterial3: true,
       ),
       routerConfig: appRouterConfig,
     );

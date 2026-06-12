@@ -3,10 +3,16 @@ import tasksRouter from "./routes/tasks";
 import projectsRouter from "./routes/projects";
 import contextsRouter from "./routes/contexts";
 import areasRouter from "./routes/areas";
+import morgan from 'morgan';
+import responseTime from 'response-time';
+import cors from 'cors';
 
 const app = express();
 
 app.use(express.json());
+app.use(morgan('combined'))
+app.use(responseTime())
+app.use(cors())
 
 // Network simulation — append to any request:
 //   ?delay=2000          → artificial latency (max 10s)
